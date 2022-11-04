@@ -3,6 +3,7 @@ from dataclasses import dataclass, field, fields, asdict
 from typing import Optional
 from time import time
 import json
+from core.__seedwork.domain.exceptions import InvalidTimeStampId
 
 gtid = None
 
@@ -41,4 +42,4 @@ class TimeStampId(ValueObject):
 				raise Exception("tid inválido!")
 
 		except ValueError as e:
-			raise Exception("tid inválido")
+			raise InvalidTimeStampId() from e

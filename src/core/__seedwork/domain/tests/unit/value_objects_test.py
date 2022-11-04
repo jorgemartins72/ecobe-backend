@@ -1,6 +1,7 @@
 from abc import ABC
 from dataclasses import FrozenInstanceError, dataclass, is_dataclass
 from core.__seedwork.domain.value_objects import TimeStampId, ValueObject
+from core.__seedwork.domain.exceptions import InvalidTimeStampId
 from pytest import raises
 from time import time
 from jmshow import show
@@ -48,7 +49,7 @@ def test_tid_instance():
 	assert obj
 
 def test_tid_instance_is_validate():
-	with raises(Exception, match=r"tid inválido"):
+	with raises(InvalidTimeStampId, match=r"tid tem que ser válido"):
 		obj = TimeStampId('ddd')
 
 def test_tid_instance_with_param():

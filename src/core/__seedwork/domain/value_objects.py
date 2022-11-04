@@ -18,14 +18,14 @@ class ValueObject(ABC):
 
 @dataclass(frozen=True, slots=True)
 class TimeStampId(ValueObject):
-	tid: str = field( default_factory=lambda: str( int(time()) ) )
+	_tid: str = field( default_factory=lambda: str( int(time()) ) )
 
 	def __post_init__(self):
 		self.__validate()
 
 	def __validate(self):
 		try:
-			if self.tid == None:
+			if self._tid == None:
 				value = int(time())
 				global gtid
 				if gtid != None:
@@ -34,11 +34,11 @@ class TimeStampId(ValueObject):
 					
 				object.__setattr__(self, "tid", str(value))
 			
-				gtid = self.tid
+				gtid = self._tid
 				
 
-			str(int(self.tid))
-			if len(str(self.tid)) != 10:
+			str(int(self._tid))
+			if len(str(self._tid)) != 10:
 				raise Exception("tid inválido!")
 
 		except ValueError as e:

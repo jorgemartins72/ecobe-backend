@@ -48,6 +48,10 @@ def test_tid_instance():
 	obj = TimeStampId()
 	assert obj
 
+def test_tid_convert_string():
+	obj = TimeStampId()
+	assert isinstance(obj._tid, str)
+
 def test_tid_instance_is_validate():
 	with raises(InvalidTimeStampId, match=r"tid tem que ser válido"):
 		obj = TimeStampId('ddd')
@@ -55,12 +59,12 @@ def test_tid_instance_is_validate():
 def test_tid_instance_with_param():
 	tid_test = str( int(time()) )
 	value_obj = TimeStampId(tid_test)
-	assert value_obj.tid == tid_test
+	assert value_obj._tid == tid_test
 
 def test_tid_is_immutable():
 	with raises(FrozenInstanceError):
 		value_object = TimeStampId()
-		value_object.tid = str( int(time()) )
+		value_object._tid = str( int(time()) )
 
 
 

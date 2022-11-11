@@ -8,6 +8,8 @@ import bcrypt
 import re
 import json
 from core.__seedwork.domain.exceptions import InvalidTimeStampId, InvalidEmail
+from datetime import datetime
+import pytz
 from jmshow import show
 
 gtid = None
@@ -88,3 +90,10 @@ class HashB():
 	@classmethod
 	def check(self, string, hash):
 		return bcrypt.checkpw(string.encode('utf-8'), hash)
+
+@dataclass(slots=True)
+class Datatime:
+
+	@classmethod
+	def now(self):
+		return datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%Y-%m-%d %H:%M:%S%z")

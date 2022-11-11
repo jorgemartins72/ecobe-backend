@@ -21,7 +21,8 @@ class Entity(ABC):
 	def _safedict(self):
 		entity_dict = asdict(self)
 		entity_dict.pop('_tid')
-		entity_dict['_tid'] = self.id
+		entity_dict['_tid'] = self._tid
+		entity_dict['password'] = entity_dict['password'].decode('utf-8')
 		return entity_dict
 
 	@property

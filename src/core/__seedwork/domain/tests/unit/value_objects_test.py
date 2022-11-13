@@ -98,8 +98,14 @@ def test_hashb():
 	assert not HashB.check('outrasenha', password)
 
 def test_datatime():
-	dtn = Datatime.now()
+	dtn1 = Datatime.now()
+	dtn2 = Datatime.now('2022-11-13 11:06:59-0300')
 	dt = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%Y-%m-%d %H:%M:%S%z") 
-	assert isinstance(datetime.strptime(dtn, '%Y-%m-%d %H:%M:%S%z'), datetime)
-	assert dtn == dt
+	assert Datatime.validate(dtn1)
+	assert Datatime.validate(dtn2)
+	assert Datatime.validate(dt)
+	assert dtn1 == dt
+	with raises(ValueError):
+		Datatime.validate('2022-11-13')
+		Datatime.validate('2022-11-13 11:06:59')
 

@@ -95,5 +95,16 @@ class HashB():
 class Datatime:
 
 	@classmethod
-	def now(self):
+	def now(self, dt: str = None) -> str:
+		if dt != None:
+			if self.validate(dt):
+				return dt
+				
 		return datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%Y-%m-%d %H:%M:%S%z")
+
+	@classmethod
+	def validate(self, dt: str) -> bool:
+		try:
+			return isinstance(datetime.strptime(dt, '%Y-%m-%d %H:%M:%S%z'), datetime)
+		except ValueError as e:
+			raise ValueError('Data no formato errado') from e

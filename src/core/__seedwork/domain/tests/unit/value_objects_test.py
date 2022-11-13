@@ -1,10 +1,17 @@
 from abc import ABC
 from dataclasses import FrozenInstanceError, dataclass, is_dataclass
 from core.__seedwork.domain.value_objects import TimeStampId, ValueObject
-from core.__seedwork.domain.exceptions import InvalidTimeStampId
+from core.__seedwork.domain.value_objects import UserRole, EmailValidate, Hasha256, HashB, Datatime
+from core.__seedwork.domain.exceptions import InvalidTimeStampId, InvalidEmail
+from enum import Enum
 from pytest import raises
 from time import time
+from datetime import datetime
+import pytz
+from faker import Faker
 from jmshow import show
+
+faker = Faker()
 
 @dataclass(frozen=True)
 class StubOneProp(ValueObject):
@@ -66,5 +73,33 @@ def test_tid_is_immutable():
 		value_object = TimeStampId()
 		value_object._tid = str( int(time()) )
 
+def test_use_role():
+	assert 'ADMIN' in UserRole._member_names_
+	assert 'admin' in UserRole._value2member_map_
+	assert 'PROFESSOR' in UserRole._member_names_
+	assert 'professor' in UserRole._value2member_map_
 
+def test_email_validate():
+	email_test = faker.email()
+	assert EmailValidate.check(email_test)
+
+def test_user_update_email_invalido():
+	with raises(InvalidEmail):
+		EmailValidate.check('email invalido')
+
+def test_hasha256():
+	password = Hasha256.hash('senha')
+	assert Hasha256.check('senha', password)
+	assert not Hasha256.check('outrasenha', password)
+
+def test_hashb():
+	password = HashB.hash('senha')
+	assert HashB.check('senha', password)
+	assert not HashB.check('outrasenha', password)
+
+def test_datatime():
+	dtn = Datatime.now()
+	dt = datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%Y-%m-%d %H:%M:%S%z") 
+	assert isinstance(datetime.strptime(dtn, '%Y-%m-%d %H:%M:%S%z'), datetime)
+	assert dtn == dt
 

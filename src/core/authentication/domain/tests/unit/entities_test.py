@@ -10,7 +10,7 @@ from time import time
 faker = Faker()
 
 dict_user1 = dict(
-	name = faker.name(),
+	name = faker.name().upper(),
 	password = faker.password(),
 	email = faker.email()
 )
@@ -18,7 +18,7 @@ dict_user1 = dict(
 dict_user2 = {**dict_user1}
 dict_user2['_tid'] = str(int(time()))
 dict_user2['role'] = UserRole.PROFESSOR
-dict_user2['nickname'] = faker.word()
+dict_user2['nickname'] = faker.word().upper()
 dict_user2['created_at'] = Datatime.now()
 dict_user2['updated_at'] = None
 
@@ -36,11 +36,8 @@ def test_user_is_a_dataclass():
 
 def test_user_constructor():
 	user = User(**dict_user1)
-	# print()
-	# print()
-	# print(user._safedict)
-
 	assert user.name == dict_user1['name']
+	assert user.email == dict_user1['email']
 	assert HashB.check(dict_user1['password'], user.password)
 
 def test_user_constructor_params():
@@ -53,6 +50,9 @@ def test_user_constructor_params():
 	assert user.created_at == dict_user2['created_at']
 	assert user.updated_at == dict_user2['updated_at']
 	assert user.is_active == True
+	print()
+	print()
+	show(user, user._safedict)
 
 def test_user_constructor_error_role():
 	with raises(InvalidUserRole):
@@ -80,8 +80,8 @@ def test_user_deactivate():
 def test_user_update():
 	user = User(**dict_user1)
 	user.update(name="Fulano de Tal", nickname="Fulano")
-	assert user.name == "Fulano de Tal"
-	assert user.nickname == "Fulano"
+	assert user.name == "FULANO DE TAL"
+	assert user.nickname == "FULANO"
 
 def test_user_update_email():
 	outro_email = faker.email()

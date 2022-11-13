@@ -10,9 +10,9 @@ class User(Entity):
 
 	role: UserRole = field(default=UserRole.PROFESSOR)
 	name: str
+	nickname: Optional[str] = None
 	email: str
 	password: str = field(repr=False)
-	nickname: Optional[str] = None
 	is_active: Optional[bool] = True
 	created_at: Optional[str] = field(default_factory=lambda: Datatime.now())
 	updated_at: Optional[str] = None
@@ -21,6 +21,9 @@ class User(Entity):
 		if not isinstance(self.role, UserRole):
 			raise InvalidUserRole()
 		self._set('role', self.role.value)
+
+		self._set('name', self.name.upper())
+		self._set('nickname', self.nickname.upper() if self.nickname != None else None)
 
 		self._set('password', HashB.hash(self.password))
 		self._set('email', self.email.lower())
@@ -33,12 +36,12 @@ class User(Entity):
 			raise InvalidEmail()
 
 	def update(self, name: str, nickname: str = None) -> None:
-		self._set('name', name)
-		self._set('nickname', nickname)
+		self._set('name', name.upper())
+		self._set('nickname', nickname.upper() if nickname != None else None)
 		self._set('updated_at', Datatime.now())
 
 	def update_email(self, email: str) -> None:
-		self._set('email', email)
+		self._set('email', email.lower())
 		self.__validate_email()
 		self._set('updated_at', Datatime.now())
 
@@ -50,13 +53,16 @@ class User(Entity):
 
 	def activate(self) -> None:
 		self._set('is_active', True)
+		self._set('updated_at', Datatime.now())
 
 	def deactivate(self) -> None:
 		self._set('is_active', False)
+		self._set('updated_at', Datatime.now())
 
 	def check_password(self, string: str) -> bool:
 		return HashB.check(string, self.password)
 
 	def update_password(self, string: str) -> None:
 		self._set('password', HashB.hash(str(string)))
+		self._set('updated_at', Datatime.now())
 

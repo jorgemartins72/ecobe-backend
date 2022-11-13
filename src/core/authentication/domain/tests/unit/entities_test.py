@@ -114,8 +114,16 @@ def test_user_update_password():
 	user.update_password('senhanova')
 	assert user.check_password('senhanova')
 
+def test_user_datatime_validate():
+	dict_user_test = {**dict_user1}
+	dict_user_test['created_at'] = '2022-11-13 11:33:15-0300'
+	user = User(**dict_user_test)
 
-
+def test_user_datatime_validate_com_data_no_formato_errado():
+	dict_user_test = {**dict_user1}
+	dict_user_test['created_at'] = '2022-11-13 11:33:15'
+	with raises(ValueError):
+		user = User(**dict_user_test)
 
 
 

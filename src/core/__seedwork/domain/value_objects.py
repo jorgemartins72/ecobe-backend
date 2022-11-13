@@ -103,7 +103,7 @@ class Datatime:
 		return datetime.now(pytz.timezone('America/Sao_Paulo')).strftime("%Y-%m-%d %H:%M:%S%z")
 
 	@classmethod
-	def validate(self, dt: str) -> bool:
+	def validate(self, dt):
 		try:
 			return isinstance(datetime.strptime(dt, '%Y-%m-%d %H:%M:%S%z'), datetime)
 		except ValueError as e:

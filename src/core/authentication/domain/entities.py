@@ -29,11 +29,21 @@ class User(Entity):
 		self._set('email', self.email.lower())
 		self.__validate_email()
 
+		self.__validate_create_at()
+		self.__validate_updated_at()
+
 	def __validate_email(self):
 		if EmailValidate.check(self.email):
 			return True
 		else:
 			raise InvalidEmail()
+
+	def __validate_create_at(self):
+		return Datatime.validate(self.created_at)
+
+	def __validate_updated_at(self):
+		if self.updated_at != None:
+			return Datatime.validate(self.updated_at)
 
 	def update(self, name: str, nickname: str = None) -> None:
 		self._set('name', name.upper())

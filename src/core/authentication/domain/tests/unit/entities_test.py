@@ -125,5 +125,41 @@ def test_user_datatime_validate_com_data_no_formato_errado():
 	with raises(ValueError):
 		user = User(**dict_user_test)
 
+def test_user_nome_longo():
+	dict_user_test = {**dict_user1}
+	dict_user_test['name'] = faker.sentence(nb_words=40)
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
+def test_user_nome_curto():
+	dict_user_test = {**dict_user1}
+	dict_user_test['name'] = faker.sentence(nb_words=2, ext_word_list=['ab', 'de'])[:-1]
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
+def test_user_nome_primeiro_nome():
+	dict_user_test = {**dict_user1}
+	dict_user_test['name'] = faker.first_name()
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
+def test_user_nickname_longo():
+	dict_user_test = {**dict_user1}
+	dict_user_test['nickname'] = 'abcdefghijklm'
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
+def test_user_nickname_curto():
+	dict_user_test = {**dict_user1}
+	dict_user_test['nickname'] = 'ab'
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
+def test_user_nickname_com_duas_palavras():
+	dict_user_test = {**dict_user1}
+	dict_user_test['nickname'] = faker.sentence(nb_words=2, ext_word_list=['ab', 'de'])[:-1]
+	with raises(ValueError):
+		user = User(**dict_user_test)
+
 
 

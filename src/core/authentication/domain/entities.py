@@ -23,9 +23,12 @@ class User(Entity):
 		self._set('role', self.role.value)
 
 		self._set('name', self.name.upper())
+		self.__validate_name()
 		self._set('nickname', self.nickname.upper() if self.nickname != None else None)
+		self.__validate_nickname()
 
 		self._set('password', HashB.hash(self.password))
+
 		self._set('email', self.email.lower())
 		self.__validate_email()
 
@@ -44,6 +47,26 @@ class User(Entity):
 	def __validate_updated_at(self):
 		if self.updated_at != None:
 			return Datatime.validate(self.updated_at)
+
+	def __validate_name(self):
+		if len(self.name) > 120:
+			raise ValueError('Name deve ter até 120 caracteres')
+		
+		if len(self.name) < 7:
+			raise ValueError('Name deve ter pelo menos 7 caracteres')
+		
+		if len(self.name.split(' ')) < 2:
+			raise ValueError('Name deve ser preenchido com nome e sobrenome')
+
+	def __validate_nickname(self):
+		if self.nickname != None and len(self.nickname) > 12:
+			raise ValueError('Nickname deve ter até 12 caracteres')
+		
+		if self.nickname != None and len(self.nickname) < 3:
+			raise ValueError('Nickname deve ter pelo menos 3 caracteres')
+		
+		if self.nickname != None and len(self.nickname.split(' ')) != 1:
+			raise ValueError('Nickname deve ser uma palavra de até 12 caracteres')
 
 	def update(self, name: str, nickname: str = None) -> None:
 		self._set('name', name.upper())

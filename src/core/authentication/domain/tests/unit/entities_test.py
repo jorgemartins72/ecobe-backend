@@ -50,9 +50,6 @@ def test_user_constructor_params():
 	assert user.created_at == dict_user2['created_at']
 	assert user.updated_at == dict_user2['updated_at']
 	assert user.is_active == True
-	print()
-	print()
-	show(user, user._safedict)
 
 def test_user_constructor_error_role():
 	with raises(InvalidUserRole):
